@@ -1,10 +1,5 @@
-import pony.pixi.nape.BodyCircleView;
-import pony.geom.Point;
-import pony.pixi.nape.NapeSpaceView;
-import pony.Config;
-import pixi.core.sprites.Sprite;
-
-final class World {
+@:assets_path('')
+final class World implements HasAsset {
 
 	private final canvas: Sprite;
 	private final space: NapeSpaceView;

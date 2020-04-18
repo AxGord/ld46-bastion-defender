@@ -53,5 +53,11 @@
 	<bmfont from="assets/fonts/" to="bin/assets/fonts/">
 		<font output="dpcomic" face="dpcomic" size="36" charset="AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz">dpcomic.ttf</font>
 	</bmfont>
+	<texturepacker format="pixijs png" from="assets/img/" to="bin/assets/" extrude="1">
+        <unit>
+            <output>game</output>
+            <input>/</input>
+        </unit>
+	</texturepacker>
 
 </project>

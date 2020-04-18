@@ -10,5 +10,6 @@ Thumbs.db
 /app.hxml
 /bin/app.js
 /bin/app.js.map
+/bin/assets/
 /jslib/
 /libcache.js

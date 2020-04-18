@@ -18,7 +18,7 @@ class GraphicsBar extends Sprite {
 		g.beginFill(0x008800);
 		g.drawRect(padding, padding, size.x - padding * 2, size.y - padding * 2);
 		addChild(g);
-		core = new SmoothBarCore(size.x);
+		core = new SmoothBarCore(size.x - padding * 2);
 		core.smoothChangeX = changeXHandler;
 		core.smooth = true;
 		core.initValue(0, 1);

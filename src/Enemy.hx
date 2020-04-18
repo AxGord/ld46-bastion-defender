@@ -1,4 +1,9 @@
-final class Enemy {
+@:assets_parent(World)
+final class Enemy implements HasAsset {
+
+	@:asset('enemy.png') private static var SKIN = 'game.json';
+
+	private static inline final DEFAULT_RADIUS: Float = 40;
 
 	private final bar: GraphicsBar = new GraphicsBar();
 	private final body: BodyCircleView;
@@ -10,12 +15,21 @@ final class Enemy {
 	private final subEnemys: Int;
 	private final radius: Float;
 
-	public function new(space: NapeSpaceView, pos: Point<Float>, subEnemys: Int, radius: Float) {
+	public function new(space: NapeSpaceView, pos: Point<Float>, subEnemys: Int, radius: Float = DEFAULT_RADIUS) {
 		this.space = space;
 		this.subEnemys = subEnemys;
 		this.radius = radius;
 		var size: Point<Float> = new Point<Float>(Config.width, Config.height);
 		body = space.enemys.createCircle(radius);
+		body.debugLines = null;
+		final skin = image(SKIN);
+		body.addChildAt(skin, 0);
+		var s = new Point(skin.width, skin.height);
+		s *= radius / DEFAULT_RADIUS;
+		skin.width = s.x;
+		skin.height = s.y;
+		skin.x = -s.x / 2;
+		skin.y = -s.y / 2;
 		space.addChild(bar);
 		DeltaTime.update << syncBar;
 		bar.core.percent = 1;

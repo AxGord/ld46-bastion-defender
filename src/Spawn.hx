@@ -18,7 +18,7 @@ final class Spawn {
 			case Direction.Right: new Point<Float>(1, Math.random());
 			case _: throw 'Error';
 		}
-		new Enemy(space, pos, Random.uint(4), 40);
+		new Enemy(space, pos, Random.uint(4));
 	}
 
 }

@@ -9,6 +9,10 @@ class Main extends pony.pixi.SimpleXmlApp {
 	}
 
 	private function loadedHandler():Void {
+		AssetManager.loadComplete(World.loadAllAssets.bind(true), create);
+	}
+
+	private function create(): Void {
 		createUI();
 		new World(world);
 	}

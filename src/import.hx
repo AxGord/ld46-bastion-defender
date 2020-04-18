@@ -9,3 +9,6 @@ import pony.time.Time;
 import pony.time.DTimer;
 import pony.time.DeltaTime;
 import pony.ui.touch.Mouse;
+import pony.geom.Rect;
+import pony.magic.HasAsset;
+import pixi.core.sprites.Sprite;
