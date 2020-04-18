@@ -1,40 +1,68 @@
-import pony.Config;
-import pony.geom.Point;
-import pony.geom.Direction;
-import pony.Random;
-import pony.math.MathTools;
-import pony.pixi.nape.NapeSpaceView;
-import pony.pixi.nape.BodyCircleView;
-
 final class Enemy {
-
-	private static inline final ENEMY_RADIUS: Float = 40;
 
 	private final body: BodyCircleView;
 	private final space: NapeSpaceView;
+	private final impulseTimer: DTimer = DTimer.createTimer(1000, -1);
+	private final pretargetSize: Point<Float> = 500;
+	private final correctionTimer: DTimer = DTimer.createTimer(2400, -1);
+	private final target: Point<Float>;
+	private final subEnemys: Int;
+	private final radius: Float;
 
-	public function new(space: NapeSpaceView) {
+	public function new(space: NapeSpaceView, pos: Point<Float>, subEnemys: Int, radius: Float) {
 		this.space = space;
+		this.subEnemys = subEnemys;
+		this.radius = radius;
 		var size: Point<Float> = new Point<Float>(Config.width, Config.height);
-		var pos: Point<Float> = size * switch Random.direction() {
-			case Direction.Down: new Point<Float>(Math.random(), 0);
-			case Direction.Up: new Point<Float>(Math.random(), 1);
-			case Direction.Left: new Point<Float>(0, Math.random());
-			case Direction.Right: new Point<Float>(1, Math.random());
-			case _: throw 'Error';
-		}
-		body = space.enemys.createCircle(ENEMY_RADIUS);
+		body = space.enemys.createCircle(radius);
+		body.core.body.mass = radius;
+		body.core.body.allowRotation = false;
 		body.core.pos = pos;
-		var target = size / 2;
-		body.core.lookAt(target.x, target.y);
-		body.core.setSpeed(200);
+		target = size / 2;
+		var pretarget = target + Point.random() * pretargetSize;
+		body.core.lookAt(pretarget.x, pretarget.y);
 		body.core.groupCollision(space.bullets.core) << hit;
-		body.core.groupCollision(space.player.core) << body.destroy.bind(null);
+		body.core.groupCollision(space.player.core) << destroy;
+		impulseTimer.complete << impulse;
+		impulseTimer.start();
+		impulse();
+		correctionTimer.complete << correction;
+		correctionTimer.start();
 	}
 
 	public function hit(): Void {
 		body.alpha -= 0.1;
-		if (body.alpha < 0.4) body.destroy();
+		if (body.alpha < 0.4) killed();
+	}
+
+	private function correction(): Void {
+		body.core.lookAtVelLin(target.x, target.y, 2);
+		DeltaTime.update << speedUpdate;
+		speedUpdate();
+	}
+
+	private function speedUpdate(): Void {
+		body.core.setSpeed(100);
+
+	}
+
+	private function impulse(): Void {
+		body.core.addSpeed(100);
+	}
+
+	private function killed(): Void {
+		var pos = body.core.pos;
+		destroy();
+		for (_ in 0...subEnemys) {
+			new Enemy(space, pos + Point.random() * radius, 0, radius / 2);
+		}
+	}
+
+	private function destroy(): Void {
+		DeltaTime.update >> speedUpdate;
+		correctionTimer.destroy();
+		impulseTimer.destroy();
+		body.destroy();
 	}
 
 }

@@ -1,12 +1,3 @@
-import pony.time.Time;
-import pony.time.DTimer;
-import pony.time.DeltaTime;
-import pony.ui.touch.Mouse;
-import pony.Config;
-import pony.pixi.nape.BodyCircleView;
-import pony.geom.Point;
-import pony.pixi.nape.NapeSpaceView;
-
 final class Player {
 
 	private static inline final PLAYER_RADIUS: Float = 60;
@@ -30,6 +21,8 @@ final class Player {
 		Mouse.onLeftDown << shoot;
 		Mouse.onLeftUp << shootsTimer.stop;
 		Mouse.onLeftUp << shootsTimer.reset;
+		Mouse.onLeave << shootsTimer.stop;
+		Mouse.onLeave << shootsTimer.reset;
 		shootsTimer.complete << shoot;
 		// space.bullets.core.collision(space.enemys.core) << () -> trace(123);
 
