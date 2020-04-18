@@ -1,5 +1,6 @@
 final class Enemy {
 
+	private final bar: GraphicsBar = new GraphicsBar();
 	private final body: BodyCircleView;
 	private final space: NapeSpaceView;
 	private final impulseTimer: DTimer = DTimer.createTimer(1000, -1);
@@ -15,9 +16,13 @@ final class Enemy {
 		this.radius = radius;
 		var size: Point<Float> = new Point<Float>(Config.width, Config.height);
 		body = space.enemys.createCircle(radius);
+		space.addChild(bar);
+		DeltaTime.update << syncBar;
+		bar.core.percent = 1;
 		body.core.body.mass = radius;
 		body.core.body.allowRotation = false;
 		body.core.pos = pos;
+		syncBar();
 		target = size / 2;
 		var pretarget = target + Point.random() * pretargetSize;
 		body.core.lookAt(pretarget.x, pretarget.y);
@@ -30,9 +35,14 @@ final class Enemy {
 		correctionTimer.start();
 	}
 
+	private function syncBar(): Void {
+		bar.x = body.x - bar.size.x / 2;
+		bar.y = body.y - bar.size.y / 2 - radius;
+	}
+
 	public function hit(): Void {
-		body.alpha -= 0.1;
-		if (body.alpha < 0.4) killed();
+		bar.core.percent -= 0.1;
+		if (bar.core.percent <= 0) killed();
 	}
 
 	private function correction(): Void {
@@ -59,6 +69,8 @@ final class Enemy {
 	}
 
 	private function destroy(): Void {
+		DeltaTime.update >> syncBar;
+		space.removeChild(bar);
 		DeltaTime.update >> speedUpdate;
 		correctionTimer.destroy();
 		impulseTimer.destroy();
