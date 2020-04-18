@@ -1,0 +1,12 @@
+<free>
+
+	<rect x="0" y="0" w="1280" h="1024" color="#000000"/>
+
+	<free id="world"/>
+
+	<layout visible="false">
+		<rectbutton w="300" h="100" color="#223322 #334433 #112211"/>
+		<text src="fonts/dpcomic.fnt" font="dpcomic" color="#FFFFFF" size="36">Start Game</text>
+	</layout>
+
+</free>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<server>
+		<path>bin/</path>
+		<port>2000</port>
+		<haxe>6010</haxe>
+	</server>
+	<config dep="app.hxml">
+		<height>1024</height>
+		<background>#1A1A1A</background>
+		<width>1280</width>
+	</config>
+	<download path="jslib/">
+		<unit url="https://raw.githubusercontent.com/jfriend00/docReady/master/docready.js"/>
+		<unit url="https://pixijs.download/v{v}/pixi.min.js" v="4.8.8" check="pixi.js - v{v}"/>
+	</download>
+	<haxelib>
+		<lib>pony dev</lib>
+		<lib>pixijs 4.8.4</lib>
+		<lib>nape dev</lib>
+	</haxelib>
+	<build>
+		<prepare hxml="app">
+			<main>Main</main>
+			<js>bin/app.js</js>
+			<cp>src</cp>
+			<dce>full</dce>
+			<d>analyzer-optimize</d>
+		</prepare>
+		<build>
+			<hxml>app</hxml>
+		</build>
+	</build>
+	<uglify libcache="true">
+		<release>
+			<c/>
+			<m/>
+		</release>
+		<debug>
+			<sourcemap>
+				<input>bin/app.js.map</input>
+				<output>bin/app.js.map</output>
+				<url>app.js.map</url>
+				<source>app.js</source>
+				<offset>0</offset>
+			</sourcemap>
+		</debug>
+		<input>jslib/docready.js</input>
+		<input>jslib/pixi.min.js</input>
+		<input>bin/app.js</input>
+		<output>bin/app.js</output>
+	</uglify>
+	<bmfont from="assets/fonts/" to="bin/assets/fonts/">
+		<font output="dpcomic" face="dpcomic" size="36" charset="AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz">dpcomic.ttf</font>
+	</bmfont>
+
+</project>

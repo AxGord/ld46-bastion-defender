@@ -1,0 +1,15 @@
+{
+"configurations": [
+{
+"request": "launch",
+"name": "Launch Chrome",
+"type": "chrome",
+"preLaunchTask": "default",
+"webRoot": "${workspaceRoot}",
+"breakOnLoad": true,
+"internalConsoleOptions": "openOnSessionStart",
+"url": "http://localhost:2000"
+}
+],
+"version": "0.2.0"
+}
