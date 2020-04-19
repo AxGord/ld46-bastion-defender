@@ -1,0 +1,5 @@
+<style>
+
+	<Text extends="text" src="fonts/dpcomic.fnt" font="dpcomic" color="#FFFFFF" size="36"/>
+
+</style>

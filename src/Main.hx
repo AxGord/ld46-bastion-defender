@@ -2,6 +2,8 @@ import pony.ui.AssetManager;
 
 class Main extends pony.pixi.SimpleXmlApp {
 
+	private var stats: Stats;
+
 	override private function init():Void {
 		onLoaded < loadedHandler;
 		AssetManager.baseUrl = 'assets/';
@@ -9,12 +11,10 @@ class Main extends pony.pixi.SimpleXmlApp {
 	}
 
 	private function loadedHandler():Void {
-		AssetManager.loadComplete(World.loadAllAssets.bind(true), create);
-	}
-
-	private function create(): Void {
 		createUI();
+		stats = new Stats(this);
 		new World(world);
+		stats.startGame();
 	}
 
 	private static function main():Void new Main();

@@ -1,8 +1,12 @@
+import pony.magic.HasSignal;
+
 @:assets_parent(World)
-final class Enemy implements HasAsset {
+final class Enemy implements HasAsset implements HasSignal {
 
 	@:asset('enemy.png') private static var SKIN = 'game.json';
 	@:asset('bang.png') private static var BANG = 'game.json';
+
+	@:auto public static final onKill: Signal1<Int>;
 
 	private static inline final DEFAULT_RADIUS: Float = 40;
 
@@ -15,11 +19,13 @@ final class Enemy implements HasAsset {
 	private final target: Point<Float>;
 	private final subEnemys: Int;
 	private final radius: Float;
+	private final cost: Int;
 
 	public function new(space: NapeSpaceView, pos: Point<Float>, subEnemys: Int, radius: Float = DEFAULT_RADIUS) {
 		this.space = space;
 		this.subEnemys = subEnemys;
 		this.radius = radius;
+		this.cost = radius == DEFAULT_RADIUS ? 3 : 4;
 		var size: Point<Float> = new Point<Float>(Config.width, Config.height);
 		body = space.enemys.createCircle(radius);
 		body.debugLines = null;
@@ -78,6 +84,7 @@ final class Enemy implements HasAsset {
 	private function killed(): Void {
 		var pos = body.core.pos;
 		destroy();
+		eKill.dispatch(cost);
 		for (_ in 0...subEnemys) {
 			new Enemy(space, pos + Point.random() * radius, 0, radius / 2);
 		}

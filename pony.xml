@@ -51,7 +51,7 @@
 		<output>bin/app.js</output>
 	</uglify>
 	<bmfont from="assets/fonts/" to="bin/assets/fonts/">
-		<font output="dpcomic" face="dpcomic" size="36" charset="AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz">dpcomic.ttf</font>
+		<font output="dpcomic" face="dpcomic" size="36" charset="AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789:$">dpcomic.ttf</font>
 	</bmfont>
 	<texturepacker format="pixijs png" from="assets/img/" to="bin/assets/" extrude="1">
         <unit>

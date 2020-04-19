@@ -1,8 +1,19 @@
-<free>
+<free src="game.json" style="style.xml">
 
-	<rect x="0" y="0" w="1280" h="1024" color="#000000"/>
+	<!-- <rect x="0" y="0" w="1280" h="1024" color="#000000"/> -->
 
 	<free id="world"/>
+
+	<layout w="1280" h="50">
+		<layout ih="10">
+			<Text>Money:</Text>
+			<Text id="money">$ 0</Text>
+		</layout>
+		<layout ih="10">
+			<Text>Score:</Text>
+			<Text id="score">0</Text>
+		</layout>
+	</layout>
 
 	<layout visible="false">
 		<rectbutton w="300" h="100" color="#223322 #334433 #112211"/>
