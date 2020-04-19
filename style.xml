@@ -6,4 +6,6 @@
 
 	<Star extends="Img" name="bang.png" alpha="0.5"/>
 
+	<Btn extends="rectbutton" w="240" h="80" color="#223322 #334433 #112211"/>
+
 </style>

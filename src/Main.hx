@@ -17,12 +17,20 @@ final class Main extends pony.pixi.SimpleXmlApp {
 		statsContoller = new Stats(this);
 		worldSpace = new World(world);
 		menu_start.core.onClick << startHandler;
+		menu_sound.core.onClick << switchSound;
 		Player.onGameOver << gameOverHandler;
 		Sound.init();
 		Sound.enabled = true;
 	}
 
+	private function switchSound(): Void {
+		Sound.enabled = !Sound.enabled;
+		menu_soundState.t = 'Sound: ' + (Sound.enabled ? 'On' : 'Off');
+		Sound.enemyShot();
+	}
+
 	private function startHandler(): Void {
+		Sound.enemyShot();
 		menu.visible = false;
 		world.visible = true;
 		final tween = new Tween(TweenType.BackSquare);

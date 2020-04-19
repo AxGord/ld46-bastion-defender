@@ -29,8 +29,20 @@
 		</layout>
 		<Img name="title.png"/>
 		<layout>
-			<rectbutton id="start" w="300" h="100" color="#223322 #334433 #112211"/>
-			<Text>Start Game</Text>
+			<layout padding="false" w="1280">
+				<layout>
+					<Btn id="leader"/>
+					<Text>Leader board</Text>
+				</layout>
+				<layout>
+					<Btn id="start"/>
+					<Text>Start Game</Text>
+				</layout>
+				<layout>
+					<Btn id="sound"/>
+					<Text id="soundState">Sound: On</Text>
+				</layout>
+			</layout>
 		</layout>
 	</layout>
 
