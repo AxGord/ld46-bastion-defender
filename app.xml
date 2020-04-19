@@ -46,6 +46,19 @@
 		</layout>
 	</layout>
 
+	<layout id="leaderBoard" visible="false" w="1280" h="1024" vert="true">
+		<layout ih="20">
+			<Star/>
+			<Text size="120">Leader board</Text>
+			<Star/>
+		</layout>
+		<layout id="list" w="1280" h="400" vert="true"/>
+		<layout>
+			<Btn id="back"/>
+			<Text>Back</Text>
+		</layout>
+	</layout>
+
 	<layout id="gameOver" visible="false" w="1280" h="1024" vert="true">
 		<Text size="120">Game over</Text>
 		<layout ih="20">

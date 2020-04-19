@@ -8,7 +8,7 @@ final class Stats {
 	private static inline final PRICE_MINE: Int = 8;
 
 	private final root: Main;
-	private var score(default, set): Int;
+	public var score(default, set): Int;
 	private var money(default, set): Int;
 	private var liveTimer: DTimer = DTimer.createTimer(4000, -1);
 
