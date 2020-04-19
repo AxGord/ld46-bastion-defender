@@ -1,3 +1,4 @@
+import pony.time.Tween;
 import pony.pixi.nape.BodyRectView;
 import pony.TypedFPool;
 
@@ -30,6 +31,7 @@ final class Player implements HasAsset implements HasSignal {
 	private final pos: Point<Float>;
 	private var bulletPool: TypedFPool<BodyRectView>;
 	private final bg: Sprite;
+	private var head: Sprite;
 
 	public function new(space: NapeSpaceView) {
 		instance = this;
@@ -69,7 +71,7 @@ final class Player implements HasAsset implements HasSignal {
 		bar.core.changeSmoothPercent << hpPercentHandler;
 		body = space.player.createCircle(PLAYER_RADIUS);
 		body.debugLines = null;
-		final head = image(HEAD);
+		head = image(HEAD);
 		body.addChild(head);
 		space.addChild(shieldBall);
 		shieldBall.x = pos.x - shieldBall.width / 2;
@@ -205,6 +207,11 @@ final class Player implements HasAsset implements HasSignal {
 	}
 
 	private function shoot(): Void {
+		final h = head.width;
+		final t = new Tween(-Std.int(h * 0.5)...-Std.int(h * 0.6), TweenType.Square, Std.int(PLAYER_SHOOT_SPEED / 3));
+		t.onUpdate << v -> head.x = v;
+		t.onComplete < t.playBack;
+		t.play();
 		repairTimer.reset();
 		var bullet = bulletPool.get();
 		bullet.core.wake();
