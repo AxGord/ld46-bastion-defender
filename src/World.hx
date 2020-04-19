@@ -8,6 +8,7 @@ final class World implements HasAsset {
 	private final canvas: Sprite;
 	private final space: NapeSpaceView;
 	private final player: Player;
+	private final spawn: Spawn;
 
 	public function new(canvas: Sprite) {
 		this.canvas = canvas;
@@ -23,8 +24,20 @@ final class World implements HasAsset {
 		space.player.core.sensor = false;
 		canvas.addChild(space);
 		player = new Player(space);
-		new Spawn(space);
+		spawn = new Spawn(space);
+	}
+
+	public function startGame(): Void {
+		space.clear();
 		space.play();
+		spawn.startGame();
+		player.startGame();
+	}
+
+	public function stopGame(): Void {
+		space.pause();
+		spawn.stopGame();
+		player.stopGame();
 	}
 
 }

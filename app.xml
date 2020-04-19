@@ -2,9 +2,9 @@
 
 	<!-- <rect x="0" y="0" w="1280" h="1024" color="#000000"/> -->
 
-	<free id="world"/>
+	<free id="world" visible="false"/>
 
-	<layout w="1280" h="50">
+	<layout w="1280" h="50" id="stats" visible="false">
 		<layout ih="10">
 			<Text>Money:</Text>
 			<Text id="money">$ 0</Text>
@@ -15,9 +15,20 @@
 		</layout>
 	</layout>
 
-	<layout visible="false">
-		<rectbutton w="300" h="100" color="#223322 #334433 #112211"/>
-		<text src="fonts/dpcomic.fnt" font="dpcomic" color="#FFFFFF" size="36">Start Game</text>
+	<layout id="menu" visible="true" w="1280" h="1024" vert="true">
+		<Text size="120">Bastion Defender</Text>
+		<layout>
+			<rectbutton id="start" w="300" h="100" color="#223322 #334433 #112211"/>
+			<Text>Start Game</Text>
+		</layout>
+	</layout>
+
+	<layout id="gameOver" visible="false" w="1280" h="1024" vert="true">
+		<Text size="120">Game over</Text>
+		<layout ih="20">
+			<Text size="60">Score:</Text>
+			<Text size="60" id="score">0</Text>
+		</layout>
 	</layout>
 
 </free>

@@ -7,7 +7,15 @@ final class Spawn {
 	public function new(space: NapeSpaceView) {
 		this.space = space;
 		timer.complete << spawn;
+	}
+
+	public function startGame(): Void {
+		timer.reset();
 		timer.start();
+	}
+
+	public function stopGame(): Void {
+		timer.stop();
 	}
 
 	public function spawn(): Void {

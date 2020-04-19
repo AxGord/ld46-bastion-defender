@@ -1,34 +1,42 @@
 @:assets_parent(World)
-final class Player implements HasAsset {
+final class Player implements HasAsset implements HasSignal {
 
 	@:asset('player_bg.png') private static var BG = 'game.json';
 	@:asset('player_head.png') private static var HEAD = 'game.json';
 	@:asset('player_shot.png') private static var BULLET = 'game.json';
 	@:asset('bang.png') private static var BANG = 'game.json';
 
+	@:auto public static final onGameOver: Signal0;
+
 	private static inline final PLAYER_RADIUS: Float = 60;
 	private static inline final PLAYER_LOOK_SPEED: Float = 6;
 	private static inline final PLAYER_SHOOT_SPEED: Int = 200;
 
 	private final bar: GraphicsBar = new GraphicsBar();
-	private final body: BodyCircleView;
+	private var body: BodyCircleView;
 	private final space: NapeSpaceView;
 	private final shootsTimer: DTimer = DTimer.createTimer(PLAYER_SHOOT_SPEED, -1);
+	private final pos: Point<Float>;
 
 	public function new(space: NapeSpaceView) {
 		this.space = space;
+		shootsTimer.complete << shoot;
 		final bg = image(BG);
 		space.addChildAt(bg, 0);
 		space.addChild(bar);
-		final pos: Point<Float> = new Point<Float>(Config.width, Config.height) / 2;
+
+		pos = new Point<Float>(Config.width, Config.height) / 2;
 		final bgPos = pos - new Point(bg.width, bg.height) / 2;
 		bg.x = bgPos.x;
 		bg.y = bgPos.y;
 		final barPos = pos - bar.size / 2;
 		bar.x = barPos.x;
 		bar.y = barPos.y - bg.height / 2;
-		bar.core.percent = 1;
+	}
 
+	public function startGame(): Void {
+		bar.core.percent = 1;
+		bar.core.changeSmoothPercent << hpPercentHandler;
 		body = space.player.createCircle(PLAYER_RADIUS);
 		body.debugLines = null;
 		final head = image(HEAD);
@@ -45,9 +53,40 @@ final class Player implements HasAsset {
 		Mouse.onLeftUp << shootsTimer.reset;
 		Mouse.onLeave << shootsTimer.stop;
 		Mouse.onLeave << shootsTimer.reset;
-		shootsTimer.complete << shoot;
-
 		body.core.groupCollision(space.enemys.core) << hit;
+	}
+
+	public function stopGame(): Void {
+		bar.core.changeSmoothPercent >> hpPercentHandler;
+		bar.core.percent = 0;
+		Mouse.onMove >> moveHandler;
+		Mouse.onLeftDown >> shootsTimer.start0;
+		Mouse.onLeftDown >> shoot;
+		Mouse.onLeftUp >> shootsTimer.stop;
+		Mouse.onLeftUp >> shootsTimer.reset;
+		Mouse.onLeave >> shootsTimer.stop;
+		Mouse.onLeave >> shootsTimer.reset;
+		shootsTimer.stop();
+		shootsTimer.reset();
+	}
+
+	private function hpPercentHandler(v: Float): Void {
+		if (v > 0) return;
+		stopGame();
+		eGameOver.dispatch();
+		final bang = image(BANG);
+		final scale = 2;
+		bang.scale = new pixi.core.math.Point(scale, scale);
+		final bPos = new Point(body.x, body.y);
+		bang.x = bPos.x - bang.width / 2;
+		bang.y = bPos.y - bang.height / 2;
+		space.addChild(bang);
+		DTimer.delay(1000, bang.destroy.bind(null)).progress << v -> {
+			bang.alpha = v;
+			bang.scale = new pixi.core.math.Point(scale + v * scale / 2, scale + v * scale / 2);
+			bang.x = bPos.x - bang.width / 2;
+			bang.y = bPos.y - bang.height / 2;
+		}
 	}
 
 	private function hit(): Void {

@@ -12,6 +12,7 @@ final class Stats {
 	}
 
 	public function startGame(): Void {
+		root.stats.visible = true;
 		score = 0;
 		money = 10;
 		liveTimer.reset();
@@ -19,6 +20,7 @@ final class Stats {
 	}
 
 	public function stopGame(): Void {
+		root.stats.visible = false;
 		liveTimer.stop();
 	}
 
@@ -34,13 +36,13 @@ final class Stats {
 
 	private function set_score(v: Int): Int {
 		score = v;
-		root.score.t = '$v';
+		root.stats_score.t = '$v';
 		return v;
 	}
 
 	private function set_money(v: Int): Int {
 		money = v;
-		root.money.t = '$ $v';
+		root.stats_money.t = '$ $v';
 		return v;
 	}
 

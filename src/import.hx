@@ -5,6 +5,7 @@ import pony.Random;
 import pony.events.Signal0;
 import pony.events.Signal1;
 import pony.events.Signal2;
+import pony.magic.HasSignal;
 import pony.math.MathTools;
 import pony.pixi.nape.NapeSpaceView;
 import pony.pixi.nape.BodyCircleView;

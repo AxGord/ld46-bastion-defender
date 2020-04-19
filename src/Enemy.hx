@@ -1,5 +1,3 @@
-import pony.magic.HasSignal;
-
 @:assets_parent(World)
 final class Enemy implements HasAsset implements HasSignal {
 
@@ -54,6 +52,7 @@ final class Enemy implements HasAsset implements HasSignal {
 		impulse();
 		correctionTimer.complete << correction;
 		correctionTimer.start();
+		body.core.onDestroy << destroy;
 	}
 
 	private function syncBar(): Void {
