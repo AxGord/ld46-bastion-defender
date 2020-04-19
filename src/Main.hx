@@ -1,4 +1,3 @@
-import pony.Pair;
 import pony.time.Tween;
 import pony.ui.AssetManager;
 
@@ -19,6 +18,8 @@ final class Main extends pony.pixi.SimpleXmlApp {
 		worldSpace = new World(world);
 		menu_start.core.onClick << startHandler;
 		Player.onGameOver << gameOverHandler;
+		Sound.init();
+		Sound.enabled = true;
 	}
 
 	private function startHandler(): Void {
@@ -33,6 +34,7 @@ final class Main extends pony.pixi.SimpleXmlApp {
 
 	private function gameOverHandler(): Void {
 		statsContoller.stopGame();
+		worldSpace.stopGame();
 		gameOver.visible = true;
 
 		gameOver_score.t = stats_score.t;

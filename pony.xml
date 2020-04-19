@@ -13,11 +13,13 @@
 	<download path="jslib/">
 		<unit url="https://raw.githubusercontent.com/jfriend00/docReady/master/docready.js"/>
 		<unit url="https://pixijs.download/v{v}/pixi.min.js" v="4.8.8" check="pixi.js - v{v}"/>
+		<unit url="https://raw.githubusercontent.com/goldfire/howler.js/master/dist/howler.min.js" v="2.1.3" check="howler.js v{v} |"/>
 	</download>
 	<haxelib>
 		<lib>pony dev</lib>
 		<lib>pixijs 4.8.4</lib>
 		<lib>nape dev</lib>
+		<lib>howlerjs 2.0.4</lib>
 	</haxelib>
 	<build>
 		<prepare hxml="app">
@@ -47,6 +49,7 @@
 		</debug>
 		<input>jslib/docready.js</input>
 		<input>jslib/pixi.min.js</input>
+		<input>jslib/howler.min.js</input>
 		<input>bin/app.js</input>
 		<output>bin/app.js</output>
 	</uglify>
@@ -59,5 +62,7 @@
             <input>/</input>
         </unit>
 	</texturepacker>
-
+	<copy from="assets/" to="bin/assets/">
+		<unit>sound.mp3</unit>
+	</copy>
 </project>

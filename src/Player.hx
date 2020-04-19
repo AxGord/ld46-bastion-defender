@@ -60,6 +60,7 @@ final class Player implements HasAsset implements HasSignal {
 	}
 
 	private function bulletHandler(id: Int): Void {
+		Sound.bullet();
 		var bullet = BodyBaseView.LIST[id];
 		final bang = image(BANG);
 		bang.scale = new pixi.core.math.Point(0.2, 0.2);
@@ -132,14 +133,17 @@ final class Player implements HasAsset implements HasSignal {
 	}
 
 	public function applyShield(): Void {
+		Sound.shield();
 		shieldBar.core.percent = 1;
 	}
 
 	public function applyRepair(): Void {
+		Sound.repair();
 		bar.core.percent = 1;
 	}
 
 	public function applyMine(): Void {
+		Sound.mine();
 		var mine = space.mines.createCircle(10, true);
 		mine.debugLines = null;
 		var mineView = image(MINE);
@@ -156,6 +160,7 @@ final class Player implements HasAsset implements HasSignal {
 
 	private function hpPercentHandler(v: Float): Void {
 		if (v > 0) return;
+		Sound.explosion();
 		final bang = image(BANG);
 		final scale = 2;
 		bang.scale = new pixi.core.math.Point(scale, scale);
@@ -182,6 +187,7 @@ final class Player implements HasAsset implements HasSignal {
 		if (shieldBar.core.percent > 0) {
 			shieldBar.core.percent -= dmg;
 			if (shieldBar.core.percent < 0) {
+				Sound.shieldOff();
 				bar.core.percent += shieldBar.core.percent;
 				shieldBar.core.percent = 0;
 			}
@@ -208,6 +214,7 @@ final class Player implements HasAsset implements HasSignal {
 		bullet.addChild(b);
 		bullet.core.body.allowRotation = false;
 		bullet.core.groupCollision(space.enemys.core) << () -> {
+			Sound.bullet();
 			final bang = image(BANG);
 			bang.scale = new pixi.core.math.Point(0.2, 0.2);
 			final bPos = new Point(bullet.x + Math.cos(bullet.core.rotation) * s.y, bullet.y + Math.sin(bullet.core.rotation) * s.y);
@@ -227,6 +234,7 @@ final class Player implements HasAsset implements HasSignal {
 	}
 
 	private function shoot(): Void {
+		Sound.playerShot();
 		final h = head.width;
 		final t = new Tween(-Std.int(h * 0.5)...-Std.int(h * 0.6), TweenType.Square, Std.int(PLAYER_SHOOT_SPEED / 3));
 		t.onUpdate << v -> head.x = v;

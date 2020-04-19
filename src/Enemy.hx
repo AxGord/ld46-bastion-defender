@@ -27,6 +27,7 @@ final class Enemy implements HasAsset implements HasSignal {
 	private var lastPos: Point<Float>;
 
 	public function new(space: NapeSpaceView, pos: Point<Float>, subEnemys: Int, radius: Float = DEFAULT_RADIUS) {
+		Sound.newEnemy();
 		this.space = space;
 		this.subEnemys = subEnemys;
 		this.radius = radius;
@@ -108,6 +109,7 @@ final class Enemy implements HasAsset implements HasSignal {
 	}
 
 	private function shot(): Void {
+		Sound.enemyShot();
 		var b = image(SHOT);
 		b.scale = new pixi.core.math.Point(radius / DEFAULT_RADIUS, radius / DEFAULT_RADIUS);
 		var s = new Point(b.width, b.height);
@@ -125,6 +127,7 @@ final class Enemy implements HasAsset implements HasSignal {
 	}
 
 	private function destroy(): Void {
+		Sound.explosion();
 		shotTimer.destroy();
 		final bang = image(BANG);
 		final scale = radius / DEFAULT_RADIUS;

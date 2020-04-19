@@ -30,13 +30,13 @@ final class World implements HasAsset {
 	}
 
 	public function startGame(): Void {
-		space.clear();
 		space.play();
 		spawn.startGame();
 		player.startGame();
 	}
 
 	public function stopGame(): Void {
+		space.clear();
 		space.pause();
 		spawn.stopGame();
 	}
