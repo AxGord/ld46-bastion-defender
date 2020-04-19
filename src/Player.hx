@@ -1,3 +1,4 @@
+import pony.pixi.nape.BodyBaseView;
 import pony.time.Tween;
 import pony.pixi.nape.BodyRectView;
 import pony.TypedFPool;
@@ -58,6 +59,25 @@ final class Player implements HasAsset implements HasSignal {
 		repairTimer.complete << repairHandler;
 	}
 
+	private function bulletHandler(id: Int): Void {
+		var bullet = BodyBaseView.LIST[id];
+		final bang = image(BANG);
+		bang.scale = new pixi.core.math.Point(0.2, 0.2);
+		final bPos = new Point(bullet.x + Math.cos(bullet.core.rotation) * 10, bullet.y + Math.sin(bullet.core.rotation) * 10);
+		bang.x = bPos.x - bang.width / 2;
+		bang.y = bPos.y - bang.height / 2;
+		bang.rotation = Math.random() * 2 * Math.PI;
+		space.addChild(bang);
+		DTimer.delay(300, bang.destroy.bind(null)).progress << v -> {
+			bang.alpha = v;
+			bang.scale = new pixi.core.math.Point(0.2 + v * 0.2, 0.2 + v * 0.2);
+			bang.x = bPos.x - bang.width / 2;
+			bang.y = bPos.y - bang.height / 2;
+		}
+		bullet.destroy();
+		hit(0.01);
+	}
+
 	private function shielChangeHandler(v: Float): Void {
 		shieldBall.visible = shieldBar.visible = v > 0;
 	}
@@ -89,7 +109,8 @@ final class Player implements HasAsset implements HasSignal {
 		Mouse.onLeave << shootsTimer.stop;
 		Mouse.onLeave << shootsTimer.reset;
 		repairTimer.start();
-		body.core.groupCollision(space.enemys.core) << hit;
+		body.core.groupCollision(space.enemys.core) << hit.bind(0.05);
+		body.core.groupCollision(space.enemy_bullets.core) << bulletHandler;
 	}
 
 	private function stopGame(): Void {
@@ -129,7 +150,7 @@ final class Player implements HasAsset implements HasSignal {
 	}
 
 	private function repairHandler(): Void {
-		bar.core.percent += 0.01;
+		bar.core.percent += 0.02;
 		if (bar.core.percent > 1) bar.core.percent = 1;
 	}
 
@@ -157,8 +178,7 @@ final class Player implements HasAsset implements HasSignal {
 		}
 	}
 
-	private function hit(): Void {
-		final dmg: Float = 0.1;
+	private function hit(dmg: Float = 0.1): Void {
 		if (shieldBar.core.percent > 0) {
 			shieldBar.core.percent -= dmg;
 			if (shieldBar.core.percent < 0) {
@@ -215,7 +235,6 @@ final class Player implements HasAsset implements HasSignal {
 		repairTimer.reset();
 		var bullet = bulletPool.get();
 		bullet.core.wake();
-		bullet.core.body.space = space.core.space;
 		var b: Sprite = cast bullet.getChildAt(0);
 		var s = new Point(b.width, b.height);
 		DeltaTime.update < () -> bullet.visible = true;

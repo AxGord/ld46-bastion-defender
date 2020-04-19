@@ -20,6 +20,7 @@ final class World implements HasAsset {
 		canvas.addChild(grassTile);
 		space.debugLines = {size: 3, color: 0xFFFFFF};
 		space.mines;
+		space.enemy_bullets;
 		space.enemys.core.sensor = false;
 		space.bullets.core.sensor = false;
 		space.player.core.sensor = false;

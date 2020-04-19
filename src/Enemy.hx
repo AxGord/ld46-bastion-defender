@@ -6,10 +6,12 @@ final class Enemy implements HasAsset implements HasSignal {
 
 	@:asset('enemy.png') private static var SKIN = 'game.json';
 	@:asset('bang.png') private static var BANG = 'game.json';
+	@:asset('enemy_shot.png') private static var SHOT = 'game.json';
 
 	@:auto public static final onKill: Signal1<Int>;
 
 	private static inline final DEFAULT_RADIUS: Float = 40;
+	private static inline final BULLET_SPEED: Float = 600;
 
 	private final bar: GraphicsBar = new GraphicsBar();
 	private final body: BodyCircleView;
@@ -17,6 +19,7 @@ final class Enemy implements HasAsset implements HasSignal {
 	private final impulseTimer: DTimer = DTimer.createTimer(1000, -1);
 	private final pretargetSize: Point<Float> = 500;
 	private final correctionTimer: DTimer = DTimer.createTimer(2400, -1);
+	private final shotTimer: DTimer = DTimer.createTimer(1000, -1);
 	private final target: Point<Float>;
 	private final subEnemys: Int;
 	private final radius: Float;
@@ -58,6 +61,7 @@ final class Enemy implements HasAsset implements HasSignal {
 		correctionTimer.complete << correction;
 		correctionTimer.start();
 		body.core.onDestroy << destroy;
+		shotTimer.complete << shot;
 	}
 
 	private function mineHandler(id: Int): Void {
@@ -78,6 +82,7 @@ final class Enemy implements HasAsset implements HasSignal {
 	private function correction(): Void {
 		body.core.lookAtVelLin(target.x, target.y, 2);
 		DeltaTime.update << speedUpdate;
+		shotTimer.start();
 		speedUpdate();
 	}
 
@@ -102,7 +107,25 @@ final class Enemy implements HasAsset implements HasSignal {
 		}
 	}
 
+	private function shot(): Void {
+		var b = image(SHOT);
+		b.scale = new pixi.core.math.Point(radius / DEFAULT_RADIUS, radius / DEFAULT_RADIUS);
+		var s = new Point(b.width, b.height);
+		var bullet = space.enemy_bullets.createRect(new Rect<Float>(0, -s.y / 2, s.x, s.y / 2), true);
+		bullet.core.onOut << bullet.destroy.bind(null);
+		bullet.debugLines = null;
+		bullet.visible = true;
+		bullet.addChild(b);
+		bullet.core.groupCollision(space.player.core) << bullet.destroy.bind(null);
+		b.y = -s.y / 2;
+		var d = new Point(Math.cos(body.core.rotation), Math.sin(body.core.rotation));
+		bullet.core.pos = body.core.pos + d;
+		bullet.core.rotation = body.core.rotation;
+		bullet.core.setSpeed(BULLET_SPEED);
+	}
+
 	private function destroy(): Void {
+		shotTimer.destroy();
 		final bang = image(BANG);
 		final scale = radius / DEFAULT_RADIUS;
 		bang.scale = new pixi.core.math.Point(scale, scale);
