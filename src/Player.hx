@@ -4,6 +4,7 @@ final class Player implements HasAsset {
 	@:asset('player_bg.png') private static var BG = 'game.json';
 	@:asset('player_head.png') private static var HEAD = 'game.json';
 	@:asset('player_shot.png') private static var BULLET = 'game.json';
+	@:asset('bang.png') private static var BANG = 'game.json';
 
 	private static inline final PLAYER_RADIUS: Float = 60;
 	private static inline final PLAYER_LOOK_SPEED: Float = 6;
@@ -66,7 +67,22 @@ final class Player implements HasAsset {
 		bullet.core.pos = body.core.pos + d;
 		bullet.core.rotation = body.core.rotation;
 		bullet.core.setSpeed(300);
-		bullet.core.groupCollision(space.enemys.core) << () -> bullet.destroy();
+		bullet.core.groupCollision(space.enemys.core) << () -> {
+			final bang = image(BANG);
+			bang.scale = new pixi.core.math.Point(0.2, 0.2);
+			final bPos = new Point(bullet.x + Math.cos(bullet.core.rotation) * s.y, bullet.y + Math.sin(bullet.core.rotation) * s.y);
+			bang.x = bPos.x - bang.width / 2;
+			bang.y = bPos.y - bang.height / 2;
+			bang.rotation = Math.random() * 2 * Math.PI;
+			space.addChild(bang);
+			DTimer.delay(300, bang.destroy.bind(null)).progress << v -> {
+				bang.alpha = v;
+				bang.scale = new pixi.core.math.Point(0.2 + v * 0.2, 0.2 + v * 0.2);
+				bang.x = bPos.x - bang.width / 2;
+				bang.y = bPos.y - bang.height / 2;
+			}
+			bullet.destroy();
+		}
 	}
 
 	private function moveHandler(x: Float, y: Float): Void {

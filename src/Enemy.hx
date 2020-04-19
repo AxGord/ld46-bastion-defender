@@ -2,6 +2,7 @@
 final class Enemy implements HasAsset {
 
 	@:asset('enemy.png') private static var SKIN = 'game.json';
+	@:asset('bang.png') private static var BANG = 'game.json';
 
 	private static inline final DEFAULT_RADIUS: Float = 40;
 
@@ -83,6 +84,19 @@ final class Enemy implements HasAsset {
 	}
 
 	private function destroy(): Void {
+		final bang = image(BANG);
+		final scale = radius / DEFAULT_RADIUS;
+		bang.scale = new pixi.core.math.Point(scale, scale);
+		final bPos = new Point(body.x, body.y);
+		bang.x = bPos.x - bang.width / 2;
+		bang.y = bPos.y - bang.height / 2;
+		space.addChild(bang);
+		DTimer.delay(300, bang.destroy.bind(null)).progress << v -> {
+			bang.alpha = v;
+			bang.scale = new pixi.core.math.Point(scale + v * scale / 2, scale + v * scale / 2);
+			bang.x = bPos.x - bang.width / 2;
+			bang.y = bPos.y - bang.height / 2;
+		}
 		DeltaTime.update >> syncBar;
 		space.removeChild(bar);
 		DeltaTime.update >> speedUpdate;
