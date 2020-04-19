@@ -38,9 +38,15 @@
 					<Btn id="start"/>
 					<Text>Start Game</Text>
 				</layout>
-				<layout>
-					<Btn id="sound"/>
-					<Text id="soundState">Sound: On</Text>
+				<layout ih="20">
+					<layout>
+						<Btn id="music"/>
+						<Text id="musicState">Music: On</Text>
+					</layout>
+					<layout>
+						<Btn id="sound"/>
+						<Text id="soundState">Sound: On</Text>
+					</layout>
 				</layout>
 			</layout>
 		</layout>

@@ -1,7 +1,6 @@
 import pony.pixi.ui.BText;
 import haxe.io.Bytes;
 import js.Browser;
-import js.Lib;
 import pony.time.Tween;
 import pony.ui.AssetManager;
 import pony.Pair;
@@ -26,10 +25,12 @@ final class Main extends pony.pixi.SimpleXmlApp {
 		worldSpace = new World(world);
 		menu_start.core.onClick << startHandler;
 		menu_sound.core.onClick << switchSound;
+		menu_music.core.onClick << switchMusic;
 		menu_leader.core.onClick << openLeader;
 		leaderBoard_back.core.onClick << backFromLeaderBoard;
 		Player.onGameOver << gameOverHandler;
 		Sound.init();
+		Music.init();
 		var storage = Browser.getLocalStorage().getItem(storageKey);
 		if (storage != null) {
 			try {
@@ -72,7 +73,9 @@ final class Main extends pony.pixi.SimpleXmlApp {
 
 	private function applySettings(): Void {
 		Sound.enabled = settings.sound;
+		Music.enabled = settings.music;
 		updateSoundState();
+		updateMusicState();
 	}
 
 	private function saveSettings(): Void {
@@ -87,12 +90,25 @@ final class Main extends pony.pixi.SimpleXmlApp {
 		saveSettings();
 	}
 
+	private function switchMusic(): Void {
+		Music.enabled = !Music.enabled;
+		updateMusicState();
+		Sound.enemyShot();
+		settings.music = Music.enabled;
+		saveSettings();
+	}
+
 	private function updateSoundState(): Void {
 		menu_soundState.t = 'Sound: ' + (Sound.enabled ? 'On' : 'Off');
 	}
 
+	private function updateMusicState(): Void {
+		menu_musicState.t = 'Music: ' + (Music.enabled ? 'On' : 'Off');
+	}
+
 	private function startHandler(): Void {
 		Sound.enemyShot();
+		Music.play();
 		menu.visible = false;
 		world.visible = true;
 		final tween = new Tween(TweenType.BackSquare);
@@ -103,6 +119,7 @@ final class Main extends pony.pixi.SimpleXmlApp {
 	}
 
 	private function gameOverHandler(): Void {
+		Music.stop();
 		settings.leaders[Std.int(Date.now().getTime() / 1000)] = statsContoller.score;
 		if (Lambda.count(settings.leaders) > 5) {
 			var min: Int = MathTools.MAX_INT;

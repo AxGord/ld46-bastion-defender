@@ -9,7 +9,7 @@ final class Sound {
 	private static var howl: Howl;
 
 	public static function init(): Void {
-		Howler.volume(0.04);
+		Howler.volume(0.4);
 		howl = new Howl({
 			src: [AssetManager.baseUrl + 'sound.mp3'],
 			sprite: {
@@ -24,6 +24,7 @@ final class Sound {
 				shieldOff: [SoundList.ShieldOff.min, SoundList.LENGTH - SoundList.ShieldOff.min]
 			}
 		});
+		howl.volume(0.2);
 	}
 
 	private static inline function play(name: String): Void if (enabled) howl.play(name);
