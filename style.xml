@@ -2,4 +2,8 @@
 
 	<Text extends="text" src="fonts/dpcomic.fnt" font="dpcomic" color="#FFFFFF" size="36" shadow="true"/>
 
+	<Img extends="image" src="game.json"/>
+
+	<Star extends="Img" name="bang.png" alpha="0.5"/>
+
 </style>

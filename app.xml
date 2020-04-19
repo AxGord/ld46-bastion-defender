@@ -22,7 +22,12 @@
 	</layout>
 
 	<layout id="menu" visible="true" w="1280" h="1024" vert="true">
-		<Text size="120">Bastion Defender</Text>
+		<layout ih="20">
+			<Star/>
+			<Text size="120">Bastion Defender</Text>
+			<Star/>
+		</layout>
+		<Img name="title.png"/>
 		<layout>
 			<rectbutton id="start" w="300" h="100" color="#223322 #334433 #112211"/>
 			<Text>Start Game</Text>
