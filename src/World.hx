@@ -19,6 +19,7 @@ final class World implements HasAsset {
 		grassTile.height = Config.height;
 		canvas.addChild(grassTile);
 		space.debugLines = {size: 3, color: 0xFFFFFF};
+		space.mines;
 		space.enemys.core.sensor = false;
 		space.bullets.core.sensor = false;
 		space.player.core.sensor = false;

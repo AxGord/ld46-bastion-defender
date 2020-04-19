@@ -9,6 +9,7 @@ final class Player implements HasAsset implements HasSignal {
 	@:asset('player_shot.png') private static var BULLET = 'game.json';
 	@:asset('bang.png') private static var BANG = 'game.json';
 	@:asset('shield.png') private static var SHIELD = 'game.json';
+	@:asset('mine.png') private static var MINE = 'game.json';
 
 	@:auto public static final onGameOver: Signal0;
 
@@ -25,6 +26,7 @@ final class Player implements HasAsset implements HasSignal {
 	private var body: BodyCircleView;
 	private final space: NapeSpaceView;
 	private final shootsTimer: DTimer = DTimer.createTimer(PLAYER_SHOOT_SPEED, -1);
+	private final repairTimer: DTimer = DTimer.createTimer(1000, -1);
 	private final pos: Point<Float>;
 	private var bulletPool: TypedFPool<BodyRectView>;
 	private final bg: Sprite;
@@ -51,6 +53,7 @@ final class Player implements HasAsset implements HasSignal {
 		shieldBall = image(SHIELD);
 		shieldBar.visible = false;
 		shieldBall.visible = false;
+		repairTimer.complete << repairHandler;
 	}
 
 	private function shielChangeHandler(v: Float): Void {
@@ -83,6 +86,7 @@ final class Player implements HasAsset implements HasSignal {
 		Mouse.onLeftUp << shootsTimer.reset;
 		Mouse.onLeave << shootsTimer.stop;
 		Mouse.onLeave << shootsTimer.reset;
+		repairTimer.start();
 		body.core.groupCollision(space.enemys.core) << hit;
 	}
 
@@ -99,6 +103,7 @@ final class Player implements HasAsset implements HasSignal {
 		Mouse.onLeftUp >> shootsTimer.reset;
 		Mouse.onLeave >> shootsTimer.stop;
 		Mouse.onLeave >> shootsTimer.reset;
+		repairTimer.stop();
 		shootsTimer.stop();
 		shootsTimer.reset();
 	}
@@ -109,6 +114,21 @@ final class Player implements HasAsset implements HasSignal {
 
 	public function applyRepair(): Void {
 		bar.core.percent = 1;
+	}
+
+	public function applyMine(): Void {
+		var mine = space.mines.createCircle(10, true);
+		mine.debugLines = null;
+		var mineView = image(MINE);
+		mine.addChild(mineView);
+		mineView.x = -mineView.width / 2;
+		mineView.y = -mineView.height / 2;
+		mine.core.pos = new Point(Mouse.x, Mouse.y);
+	}
+
+	private function repairHandler(): Void {
+		bar.core.percent += 0.01;
+		if (bar.core.percent > 1) bar.core.percent = 1;
 	}
 
 	private function hpPercentHandler(v: Float): Void {
@@ -185,6 +205,7 @@ final class Player implements HasAsset implements HasSignal {
 	}
 
 	private function shoot(): Void {
+		repairTimer.reset();
 		var bullet = bulletPool.get();
 		bullet.core.wake();
 		bullet.core.body.space = space.core.space;

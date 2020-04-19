@@ -1,3 +1,6 @@
+import pony.pixi.nape.BodyBaseView;
+import pony.physics.nape.BodyBase;
+
 @:assets_parent(World)
 final class Enemy implements HasAsset implements HasSignal {
 
@@ -18,6 +21,7 @@ final class Enemy implements HasAsset implements HasSignal {
 	private final subEnemys: Int;
 	private final radius: Float;
 	private final cost: Int;
+	private var lastPos: Point<Float>;
 
 	public function new(space: NapeSpaceView, pos: Point<Float>, subEnemys: Int, radius: Float = DEFAULT_RADIUS) {
 		this.space = space;
@@ -47,12 +51,18 @@ final class Enemy implements HasAsset implements HasSignal {
 		body.core.lookAt(pretarget.x, pretarget.y);
 		body.core.groupCollision(space.bullets.core) << hit;
 		body.core.groupCollision(space.player.core) << destroy;
+		body.core.groupCollision(space.mines.core) << mineHandler;
 		impulseTimer.complete << impulse;
 		impulseTimer.start();
 		impulse();
 		correctionTimer.complete << correction;
 		correctionTimer.start();
 		body.core.onDestroy << destroy;
+	}
+
+	private function mineHandler(id: Int): Void {
+		killed();
+		BodyBaseView.LIST[id].destroy();
 	}
 
 	private function syncBar(): Void {
@@ -73,7 +83,6 @@ final class Enemy implements HasAsset implements HasSignal {
 
 	private function speedUpdate(): Void {
 		body.core.setSpeed(100);
-
 	}
 
 	private function impulse(): Void {
@@ -81,11 +90,15 @@ final class Enemy implements HasAsset implements HasSignal {
 	}
 
 	private function killed(): Void {
-		var pos = body.core.pos;
+		lastPos = body.core.pos;
 		destroy();
 		eKill.dispatch(cost);
+		DeltaTime.update < createSub;
+	}
+
+	private function createSub(): Void {
 		for (_ in 0...subEnemys) {
-			new Enemy(space, pos + Point.random() * radius, 0, radius / 2);
+			new Enemy(space, lastPos + Point.random() * radius, 0, radius / 2);
 		}
 	}
 

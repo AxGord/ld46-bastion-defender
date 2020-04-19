@@ -5,7 +5,7 @@ final class Stats {
 
 	private static inline final PRICE_SHIELD: Int = 24;
 	private static inline final PRICE_REPAIR: Int = 35;
-	private static inline final PRICE_MINE: Int = 15;
+	private static inline final PRICE_MINE: Int = 8;
 
 	private final root: Main;
 	private var score(default, set): Int;
@@ -43,6 +43,9 @@ final class Stats {
 			case Number2 if (money >= PRICE_REPAIR):
 				money -= PRICE_REPAIR;
 				Player.instance.applyRepair();
+			case Number3 if (money >= PRICE_MINE):
+				money -= PRICE_MINE;
+				Player.instance.applyMine();
 			case _:
 		}
 	}

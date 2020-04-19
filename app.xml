@@ -18,7 +18,7 @@
 	<layout id="store" visible="false" w="1280" h="50" y="974">
 		<Text>(1) Shield: $ 24</Text>
 		<Text>(2) Repair: $ 35</Text>
-		<Text>(3) Mine: $ 15</Text>
+		<Text>(3) Mine: $ 8</Text>
 	</layout>
 
 	<layout id="menu" visible="true" w="1280" h="1024" vert="true">
