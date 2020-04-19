@@ -1,4 +1,11 @@
+import pony.ui.keyboard.Key;
+import pony.ui.keyboard.Keyboard;
+
 final class Stats {
+
+	private static inline final PRICE_SHIELD: Int = 24;
+	private static inline final PRICE_REPAIR: Int = 35;
+	private static inline final PRICE_MINE: Int = 15;
 
 	private final root: Main;
 	private var score(default, set): Int;
@@ -13,15 +20,31 @@ final class Stats {
 
 	public function startGame(): Void {
 		root.stats.visible = true;
+		root.store.visible = true;
 		score = 0;
 		money = 10;
 		liveTimer.reset();
 		liveTimer.start();
+		Keyboard.click << keyHandler;
 	}
 
 	public function stopGame(): Void {
 		root.stats.visible = false;
+		root.store.visible = false;
 		liveTimer.stop();
+		Keyboard.click >> keyHandler;
+	}
+
+	private function keyHandler(key: Key): Void {
+		switch key {
+			case Number1 if (money >= PRICE_SHIELD):
+				money -= PRICE_SHIELD;
+				Player.instance.applyShield();
+			case Number2 if (money >= PRICE_REPAIR):
+				money -= PRICE_REPAIR;
+				Player.instance.applyRepair();
+			case _:
+		}
 	}
 
 	private function liveHandler(): Void {

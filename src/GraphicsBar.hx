@@ -10,12 +10,12 @@ class GraphicsBar extends Sprite {
 	private final g: Graphics = new Graphics();
 	private final padding: Float = 2;
 
-	public function new() {
+	public function new(color: UInt = 0x008800) {
 		super();
 		bg.beginFill(0x505050);
 		bg.drawRect(0, 0, size.x, size.y);
 		addChild(bg);
-		g.beginFill(0x008800);
+		g.beginFill(color);
 		g.drawRect(padding, padding, size.x - padding * 2, size.y - padding * 2);
 		addChild(g);
 		core = new SmoothBarCore(size.x - padding * 2);

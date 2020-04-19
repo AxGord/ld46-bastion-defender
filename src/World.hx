@@ -37,7 +37,6 @@ final class World implements HasAsset {
 	public function stopGame(): Void {
 		space.pause();
 		spawn.stopGame();
-		player.stopGame();
 	}
 
 }
