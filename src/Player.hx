@@ -29,6 +29,7 @@ final class Player implements HasAsset implements HasSignal {
 	private final space: NapeSpaceView;
 	private final shootsTimer: DTimer = DTimer.createTimer(PLAYER_SHOOT_SPEED, -1);
 	private final repairTimer: DTimer = DTimer.createTimer(1000, -1);
+	private final shieldTimer: DTimer = DTimer.createTimer(1000, -1);
 	private final pos: Point<Float>;
 	private var bulletPool: TypedFPool<BodyRectView>;
 	private final bg: Sprite;
@@ -57,6 +58,7 @@ final class Player implements HasAsset implements HasSignal {
 		shieldBar.visible = false;
 		shieldBall.visible = false;
 		repairTimer.complete << repairHandler;
+		shieldTimer.complete << () -> shieldBar.core.percent -= 0.04;
 	}
 
 	private function bulletHandler(id: Int): Void {
@@ -110,8 +112,13 @@ final class Player implements HasAsset implements HasSignal {
 		Mouse.onLeave << shootsTimer.stop;
 		Mouse.onLeave << shootsTimer.reset;
 		repairTimer.start();
-		body.core.groupCollision(space.enemys.core) << hit.bind(0.05);
+		body.core.groupCollision(space.enemys.core) << enemyCollision;
 		body.core.groupCollision(space.enemy_bullets.core) << bulletHandler;
+	}
+
+	private function enemyCollision(id: Int): Void {
+		var enemy: BodyCircleView = cast BodyBaseView.LIST[id];
+		hit(0.0025 * enemy.core.radius);
 	}
 
 	private function stopGame(): Void {
@@ -135,6 +142,7 @@ final class Player implements HasAsset implements HasSignal {
 	public function applyShield(): Void {
 		Sound.shield();
 		shieldBar.core.percent = 1;
+		shieldTimer.start();
 	}
 
 	public function applyRepair(): Void {
@@ -187,6 +195,7 @@ final class Player implements HasAsset implements HasSignal {
 		if (shieldBar.core.percent > 0) {
 			shieldBar.core.percent -= dmg;
 			if (shieldBar.core.percent < 0) {
+				shieldTimer.stop();
 				Sound.shieldOff();
 				bar.core.percent += shieldBar.core.percent;
 				shieldBar.core.percent = 0;

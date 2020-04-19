@@ -46,7 +46,7 @@ final class Main extends pony.pixi.SimpleXmlApp {
 
 	private function openLeader(): Void {
 		Sound.enemyShot();
-		menu.visible = false;
+		menu.visible = manual.visible = false;
 		leaderBoard.visible = true;
 		while (leaderBoard_list.children.length > 0) leaderBoard_list.remove(cast leaderBoard_list.getChildAt(0));
 		var data = [ for (time => score in settings.leaders) new Pair(time, score) ];
@@ -67,7 +67,7 @@ final class Main extends pony.pixi.SimpleXmlApp {
 
 	private function backFromLeaderBoard(): Void {
 		Sound.enemyShot();
-		menu.visible = true;
+		menu.visible = manual.visible = true;
 		leaderBoard.visible = false;
 	}
 
@@ -109,7 +109,7 @@ final class Main extends pony.pixi.SimpleXmlApp {
 	private function startHandler(): Void {
 		Sound.enemyShot();
 		Music.play();
-		menu.visible = false;
+		menu.visible = manual.visible = false;
 		world.visible = true;
 		final tween = new Tween(TweenType.BackSquare);
 		tween.onProgress << v -> world.alpha = v;
@@ -152,7 +152,7 @@ final class Main extends pony.pixi.SimpleXmlApp {
 				worldSpace.stopGame();
 				world.visible = false;
 				gameOver.visible = false;
-				menu.visible = true;
+				menu.visible = manual.visible = true;
 			}
 			tween.play();
 		}

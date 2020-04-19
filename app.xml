@@ -21,7 +21,7 @@
 		<Text>(3) Mine: $ 8</Text>
 	</layout>
 
-	<layout id="menu" visible="true" w="1280" h="1024" vert="true">
+	<layout id="menu" visible="true" w="1280" h="1000" vert="true">
 		<layout ih="20">
 			<Star/>
 			<Text size="120">Bastion Defender</Text>
@@ -29,7 +29,7 @@
 		</layout>
 		<Img name="title.png"/>
 		<layout>
-			<layout padding="false" w="1280">
+			<layout padding="false" w="1280" h="120">
 				<layout>
 					<Btn id="leader"/>
 					<Text>Leader board</Text>
@@ -49,6 +49,13 @@
 					</layout>
 				</layout>
 			</layout>
+		</layout>
+	</layout>
+
+	<layout id="manual" visible="true" w="1280" h="1000" vert="true" align="center bottom">
+		<layout iv="10">
+			<Text>Manual: Use the mouse cursor to aim and shoot. Keyboard buttons 1, 2, 3 for upgrades.</Text>
+			<Text>(C) 2020 - AxGord [axgord@gmail.com]</Text>
 		</layout>
 	</layout>
 
