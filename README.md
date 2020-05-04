@@ -11,6 +11,29 @@ Description:
 Destroy enemies, earn money, buy upgrades, hold out as long as possible.
 Mouse cursor for sight and shots. Keys 1, 2, 3 for upgrades.
 
+Build:
+---
+
+1. Install Haxe 4
+
+https://haxe.org
+
+2. Install Pony
+
+```
+haxelib install pony
+haxelib run pony
+```
+
+3. Clone project
+
+4. Build
+
+```
+cd PROJECT_DIR
+pony prepare
+pony build
+```
 
 Tools Used:
 ---
