@@ -5,6 +5,8 @@ https://ldjam.com/events/ludum-dare/46/bustion-defender
 
 https://axgord.itch.io/bastion-defender
 
+![Bastion Defender](assets/img/title.png)
+
 Description:
 ---
 
