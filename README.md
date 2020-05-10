@@ -13,6 +13,10 @@ Description:
 Destroy enemies, earn money, buy upgrades, hold out as long as possible.
 Mouse cursor for sight and shots. Keys 1, 2, 3 for upgrades.
 
+Gameplay Video:
+---
+https://youtu.be/j38LnPe6Y_Y
+
 Build:
 ---
 
