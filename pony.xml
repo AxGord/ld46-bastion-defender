@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project>
+<project haxeVersion="4.1.0">
 	<server>
 		<path>bin/</path>
 		<port>2000</port>
@@ -16,7 +16,7 @@
 		<unit url="https://raw.githubusercontent.com/goldfire/howler.js/master/dist/howler.min.js" v="2.1.3" check="howler.js v{v} |"/>
 	</download>
 	<haxelib>
-		<lib>pony 1.2.7</lib>
+		<lib>pony 1.3.0</lib>
 		<lib>pixijs 4.8.4</lib>
 		<lib>nape-haxe4 2.0.21</lib>
 		<lib>howlerjs 2.0.4</lib>
